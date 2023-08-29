@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <link rel="stylesheet" href="css/editcandidate.css">
+</head>
+<body>
+    <div id="father">
+        <div class="top">
+            在线投票>活动列表>候选人列表>编辑候选人
+        </div>
+        
+        <div class="bottom">
+            <el-form ref="form" label-width="80px" size="mini">
+                <el-form-item label="姓名">
+                    <el-input></el-input>
+                </el-form-item>
+
+                <el-form-item label="编号">
+                    <el-input></el-input>
+                </el-form-item>
+
+                <el-form-item label="简介">
+                    <el-input></el-input>
+                </el-form-item>
+
+                <el-form-item label="得票数">
+                    <el-input></el-input>
+                </el-form-item>
+
+                <el-form-item label="头像" label-width="90px">
+                    <el-upload
+                        class="upload-demo"
+                        drag
+                        action="https://jsonplaceholder.typicode.com/posts/"
+                        multiple>
+                        <i class="el-icon-upload"></i>
+                        <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+                        <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>
+                        </el-upload>
+                </el-form-item>
+
+                <el-form-item>
+                    <el-button type="primary">提交</el-button>
+                    <el-button type="warning">返回</el-button>
+                </el-form-item>
+            </el-form>
+        </div>
+            
+    </div>
+
+    <!-- 引入vue -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.7.14/dist/vue.js"></script>
+    <!-- 引入组件库 -->
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <script>
+        var app = new Vue({
+            el:"#father",
+            data:{
+                tableData: [{
+                    date: '2016-05-02',
+                    name: '王小虎',
+                    id: 1
+                    }, {
+                    date: '2016-05-04',
+                    name: '王小虎',
+                    id: 2
+                    }, {
+                    date: '2016-05-01',
+                    name: '王小虎',
+                    id: 3
+                    }, {
+                    date: '2016-05-03',
+                    name: '王小虎',
+                    id: 4
+                }]
+            }
+        })
+    </script>
+</body>
+</html>

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="css/index-el.css">
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+</head>
+<body>
+    <div id="father">
+        <el-container>
+            <el-header>
+                <div class="head_left">
+                    在线投票系统
+                </div>
+                <div class="head_right">
+                    欢迎您！{{user.unickname}}
+                </div>
+            </el-header>
+
+            <el-container>
+              <el-aside width="200px">
+                <div class="avatar">
+                    <img src="img/avatar.jpg" alt="">
+                    <p>{{user.unickname}}</p>
+                </div>
+                    <ul>
+                        <li>
+                            <a href="votelist.html" target="main">
+                                <img src="img/icon_doc.png" alt="">
+                                <span>在线投票</span>
+                                <img src="img/icon_rightarrow.png" alt="">
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" target="main">
+                                <img src="img/icon_doc.png" alt="">
+                                <span>在线投票</span>
+                                <img src="img/icon_rightarrow.png" alt="">
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" target="main">
+                                <img src="img/icon_doc.png" alt="">
+                                <span>在线投票</span>
+                                <img src="img/icon_rightarrow.png" alt="">
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" target="main">
+                                <img src="img/icon_doc.png" alt="">
+                                <span>在线投票</span>
+                                <img src="img/icon_rightarrow.png" alt="">
+                            </a>
+                        </li>
+
+                    </ul>
+              </el-aside>
+              <el-main>
+                <iframe name="main" src="votelist.html"></iframe>
+              </el-main>
+            </el-container>
+          </el-container>
+    </div>
+
+    <!-- 引入vue -->
+    <script src="js/vue.js"></script>
+    <!-- 引入组件库 -->
+    <script src="js/el-index.js"></script>
+    <script src="js/axios.min.js"></script>
+    <script>
+        var app = new Vue({
+            el:"#father",
+            data:{
+                //定义变量
+                user:{}
+            },
+            created() { //vue生命周期中的一个方法
+                //查询 get中是servlet的别名
+                var _this = this;   //vue对象
+                axios.get("user").then(
+                    function (res) {    //请求成功的函数，所有的数据都自动保存在res参数中
+                        //console.log(res.data.data)
+                        //把请求到的用户信息赋值给定义的变量user
+                        _this.user = res.data.data;
+                    },
+                    function (err) {    //请求失败的函数
+
+                    }
+                )
+            }
+        })
+    </script>
+</body>
+</html>

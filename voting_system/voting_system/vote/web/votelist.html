@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <link rel="stylesheet" href="css/votelist.css">
+</head>
+<body>
+    <div id="father">
+        <div class="top">
+            在线投票>活动列表
+        </div>
+        <div class="bottom">
+            <div class="bottom_one">
+                <el-button type="primary" plain @click="newActivity">新增活动</el-button>
+                <p>
+                    <el-input placeholder="请输入活动名或活动编号"></el-input>
+                    <el-button type="primary">查询活动</el-button>
+                </p>
+            </div>
+            <div class="bottom_two">
+                <el-table
+                :data="tableData"
+                stripe
+                style="width: 100%">
+                    <el-table-column
+                    prop="aid"
+                    label="#"
+                    width="80">
+                    </el-table-column>
+                    <el-table-column
+                    prop="aname"
+                    label="活动名"
+                    width="180">
+                    </el-table-column>
+                    <el-table-column
+                    prop="atotals"
+                    label="总票数"
+                    width="120">
+                    </el-table-column>
+                    <el-table-column
+                    prop="astartTime"
+                    label="开始时间">
+                    </el-table-column>
+                    <el-table-column
+                    prop="aendTime"
+                    label="截止时间">
+                    </el-table-column>
+
+                    <el-table-column
+                    prop="name"
+                    label="操作">
+                        <!--删除数据时，要删除当前行的数据，获取当前行的数据-->
+                        <template slot-scope="scope">
+                            <el-button type="danger" icon="el-icon-delete" circle v-on:click="toErase(scope.row.aid)"></el-button>
+                            <el-button type="primary" icon="el-icon-edit" circle v-on:click="toEdit(scope.row.aid)"></el-button>
+                            <el-button type="warning" round @click="candidate(scope.row.aid)">候选人列表</el-button>
+                        </template>
+                    </el-table-column>
+              </el-table>
+            </div>
+            <div class="bottom_three">
+                <el-pagination
+                background
+                layout="prev, pager, next"
+                :total="1000">
+                </el-pagination>
+            </div>
+        </div>
+    </div>
+
+    <!-- 引入vue -->
+    <script src="js/vue.js"></script>
+    <!-- 引入组件库 -->
+    <script src="js/el-index.js"></script>
+    <script src="js/axios.min.js"></script>
+
+    <script>
+        var app = new Vue({
+            el:"#father",
+            data:{
+                tableData: [
+                ]
+            },
+            methods:{
+                newActivity(){
+                    location.href="insertvote.html";
+                },
+                candidate(aid){
+                    // alert("aaa");
+                    location.href="candidatelist.html?aid=" + aid;
+                },
+                toErase(res){
+                    var _this = this;
+                    this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'warning'
+                    }).then(() => {
+                        var params = new URLSearchParams();
+                        params.set("aid",res);
+                        axios.post("deleteActivity",params).then(
+                            function(ress) {
+                                console.log(ress.data.message);
+
+                                if (ress.data.message == "200") {
+                                    _this.$message({
+                                        type: 'success',
+                                        message: '删除成功!'
+                                    });
+                                    //刷新数据
+                                    axios.get("allActivities").then(
+                                        function (res) {
+                                            // console.log(res.data)
+                                            _this.tableData = res.data.data;
+                                        },
+                                        function(err) {
+
+                                        }
+                                    )
+                                }else{
+                                    _this.$message({
+                                        type: 'err',
+                                        message: '删除失败!'
+                                    });
+                                }
+                            }
+                        )
+                    }).catch(() => {
+
+                    });
+                },
+                toEdit(aid){
+                    location.href = "updatevote.html?aid="+aid;
+                }
+            },
+            created(){
+              var _this = this;
+              axios.get("allActivities").then(
+                  function (res) {
+                    // console.log(res.data)
+                      _this.tableData = res.data.data;
+                  },
+                  function(err) {
+
+                  }
+              )
+            }
+        })
+    </script>
+</body>
+</html>

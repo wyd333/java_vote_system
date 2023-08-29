@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>新用户注册</title>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+
+    <!-- 链接css库 -->
+    <link rel="stylesheet" href="css/register.css">
+</head>
+<body>
+    <el-form status-icon ref="ruleForm" label-width="100px" class="register-form" name="aform">
+        <div class="register_title">
+            <h1>新 用 户 注 册</h1>
+        </div>
+        <hr>
+
+        <div class="input">
+            <p>用户名</p>
+            <el-input v-model="uname" class="username" placeholder="请设置您的用户名，该用户名可用于登录" required></el-input>
+        </div>
+        <div class="input">
+            <p>密码</p>
+            <el-input v-model="upwd" class="password" placeholder="请设置密码" show-password required></el-input>
+        </div>
+        <div class="input">
+            <p>昵称</p>
+            <el-input v-model="unickname" class="userid" placeholder="请设置昵称" required></el-input>
+        </div>
+
+
+        <el-row class="button">
+            <el-button class="submit" v-on:click="toRegister" type="primary">注册账号</el-button>
+
+            <el-button  class="reset" type="success" >重置信息</el-button>
+        </el-row>
+
+        <div class="remind_login">
+            已有账号？<a href="login.html">点击登录</a>
+        </div>
+    </el-form>
+
+    
+    <!-- 引入组件库 -->
+    <script src="js/vue.js"></script>
+	<script src="js/el-index.js"></script>
+    <script src="js/axios.min.js"></script>
+
+    <script>
+        var app = new Vue({
+            el:".register-form",    // 挂载
+            data:{
+                uname:"",
+                upwd:"",
+                unickname:""
+            },
+            methods:{
+                toRegister(){
+                   console.log(this.uname+","+this.upwd+","+this.unickname);
+                    //把数据提交到servlet中
+                    //把json格式转成参数形式，传递给servlet（有框架时自动进行处理）
+                    var params = new URLSearchParams();
+                    params.set("uname", this.uname);
+                    params.set("upwd",this.upwd);
+                    params.set("unickname",this.unickname);
+                    var _this = this;
+                    //非空判断
+                    console.log(this.uname + " " + this.upwd + " " + this.unickname)
+                    if (this.upwd == null || this.upwd == "" || this.uname == null || this.uname == "" || this.unickname ==""|| this.unickname ==null) {
+                        alert('账号\\密码\\昵称不能为空！')
+                        return;
+                    }
+                    axios.post("register",params).then(
+                       function (res) {
+                           if(res.data.message == "200") {
+                               _this.$alert('注册成功！', '', {
+                                   confirmButtonText: '去登录',
+                                   callback: action => {
+                                        //跳转到登陆界面
+                                       location.href = "login.html";
+                                   }
+                               });
+                           }else if(res.data.message == "201"){
+                               _this.$alert('该账号已存在！', '', {
+                                   confirmButtonText: '确定',
+                                   callback: action => {
+                                   }
+                               });
+                           }else{
+                               _this.$alert('注册失败！', '', {
+                                   confirmButtonText: '确定',
+                                   callback: action => {
+                                   }
+                               });
+                           }
+                       }
+                   )
+                }
+            }
+        })
+    </script>
+</body>
+</html>

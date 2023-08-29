@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <link rel="stylesheet" href="css/candidatelist.css">
+</head>
+<body>
+    <div id="father">
+        <div class="top">
+            在线投票>活动列表>候选人列表
+        </div>
+        <div class="bottom">
+            <div class="bottom_one">
+                <el-button type="primary" plain @click="newCandidate">新增候选人</el-button>
+                <p>
+                    <el-input placeholder="请输入内容"></el-input>
+                    <el-button type="primary">查询候选人</el-button>
+                </p>
+            </div>
+            <div class="bottom_two">
+                <el-table
+                :data="tableData"
+                stripe
+                style="width: 100%">
+
+
+                    <el-table-column
+                    prop="canid"
+                    label="#"
+                    width="80">
+                    </el-table-column>
+
+                    <el-table-column
+                    prop="canname"
+                    label="候选人姓名"
+                    width="180">
+                    </el-table-column>
+
+                    <el-table-column
+                    prop="cannum"
+                    label="得票数"
+                    width="120">
+                    </el-table-column>
+
+                    <el-table-column
+                    prop="canavatar"
+                    label="头像">
+                        <template slot-scope="scope">
+                            <img :src=path+scope.row.canavatar width="40" height="40"/>
+                        </template>
+                    </el-table-column>
+
+                    <el-table-column
+                    prop=""
+                    label="操作">
+                        <template slot-scope="scope">
+                            <el-button type="danger" icon="el-icon-delete" circle></el-button>
+                            <el-button type="primary" icon="el-icon-edit" circle></el-button>
+                        </template>
+                    </el-table-column>
+              </el-table>
+            </div>
+            <div class="bottom_three">
+                <el-pagination
+                background
+                layout="prev, pager, next"
+                :total="1000">
+                </el-pagination>
+            </div>
+        </div>
+    </div>
+
+    <!-- 引入vue -->
+    <script src="js/vue.js"></script>
+    <!-- 引入组件库 -->
+    <script src="js/el-index.js"></script>
+    <script src="js/axios.min.js"></script>
+
+    <script>
+        var app = new Vue({
+            el:"#father",
+            data:{
+                tableData: [],
+                path: "http://localhost:8080"
+
+            },
+            methods:{
+                newCandidate(){
+                    location.href="editcandidate.html";
+                }
+            },
+            created(){
+                var _this = this;
+                var aid = location.href.split("=")[1];
+                axios.get("listCandidateServlet?aid="+aid).then(
+                    function (res) {
+                        console.log(res.data.data);
+                        console.log(res.data.message);
+                        if (res.data.message == "200") {
+                            _this.tableData = res.data.data
+                        }
+                    }
+                )
+
+            }
+        })
+    </script>
+</body>
+</html>
